@@ -1,3 +1,8 @@
+# THREE_TEST
+> Some test code with three.js 
+
+## 创建一个旋转的立方体 
+```javascript
 import * as THREE from 'three'
 
 // 1. 创建场景
@@ -39,3 +44,5 @@ function animate(){
 }
 
 animate();
+```
+
