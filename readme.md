@@ -1,6 +1,14 @@
 # THREE_TEST
 > Some test code with three.js 
 
+## Start 
+```bash
+# node version should >= 18.0.0, current repo use 20.0.0
+cd Three_test
+
+npx vite
+```
+
 ## 创建一个旋转的立方体 
 ```javascript
 import * as THREE from 'three'
