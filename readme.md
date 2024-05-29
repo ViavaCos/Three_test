@@ -25,6 +25,7 @@ const renderer = new THREE.WebGLRenderer();
 
 // 4. 设置渲染尺寸并将渲染器加入到页面中
 renderer.setSize(window.innerWidth, window.innerHeight);
+renderer.setPixelRatio(window.devicePixelRatio)
 document.body.appendChild(renderer.domElement)
 
 // 创建立方体
@@ -114,6 +115,18 @@ const importAirplane = () => {
 
 ## 创建一个球体并赋予其阴影和投影
 ```javascript
+// 创建场景、相机、渲染器并挂在至浏览器窗口
+const scene = new THREE.Scene()
+const camera = new THREE.PerspectiveCamera(
+  100, window.innerWidth / window.innerHeight, 0.1, 1000
+)
+const renderer = new THREE.WebGLRenderer()
+renderer.setSize(window.innerWidth, window.innerHeight)
+document.body.appendChild(renderer.domElement)
+
+// 1.渲染器开启阴影贴图
+renderer.shadowMap.enabled = true
+
 const createBall = () => {
   const sphereGeo = new THREE.SphereGeometry(1, 20, 20)
   const material = new THREE.MeshStandardMaterial()
