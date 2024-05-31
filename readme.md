@@ -176,3 +176,104 @@ const createBall = () => {
   // scene.add(spotLightHelper)
 }
 ```
+
+## 播放模型中的骨骼动画
+```JavaScript
+// 加载机器人模型
+const loadBot = () => {
+  const modelPath = '../static/Xbot.glb'
+  const loader = new GLTFLoader()
+
+  loader.load(modelPath, (modelData) => {
+    // 将模型加入到场景中
+    scene.add(modelData.scene)
+
+    // 打开骨架助手
+    const skeleton = new THREE.SkeletonHelper(modelData.scene)
+    skeleton.visible = false
+    scene.add(skeleton)
+
+    // 创建动画控制器
+    const mixer = new THREE.AnimationMixer(modelData.scene)
+    modelData.animations.forEach(clip => {
+      const action = mixer.clipAction(clip)
+
+      // 存储3d模型里的动画
+      animationHub[clip.name] = action;
+    })
+
+    createGUI()
+
+    const clock = new THREE.Clock();
+
+    function animate(){
+      requestAnimationFrame(animate)
+      const delta = clock.getDelta()
+      if(mixer) mixer.update(delta)
+
+      renderer.render(scene, camera)
+    }
+    animate();
+
+  }, (event) => {
+    console.log(event.loaded / event.total * 100 + '% loaded.')
+  }, (err) => {
+    console.log(err);
+  })
+}
+
+// 创建GUI
+const createGUI = () => {
+  const gui = new GUI()
+  const animateFolder = gui.addFolder("动画")
+
+  // 收起
+  // animateFolder.close();
+
+  // 展开（默认） 
+  // animateFolder.open();
+
+  animateFolder.add(
+    currentAnimate, 'action', Object.keys(animationHub)
+  ).name('模型动画').onChange(key => {
+    console.log(1008600, { key });
+    executeAnimateWithKey(key)
+  }).setValue('idle')
+
+  bindKeyBoard()
+}
+
+// 绑定键盘
+const bindKeyBoard = () => {
+  document.addEventListener('keyup', (event) => {
+    // run
+    if(event.key === 'W') {
+      executeAnimateWithKey('run')
+      return;
+    }
+
+    // walk
+    if(event.key === 'w') {
+      executeAnimateWithKey('walk')
+      return;
+    }
+
+    // stop
+    if(event.key === 's') {
+      executeAnimateWithKey('idle')
+      return;
+    }
+  })
+}
+
+// 根据键名执行动画
+const executeAnimateWithKey = (keyName) => {
+  Object.values(animationHub).forEach(i => {
+    i.stop();
+  })
+
+  if(animationHub[keyName]) {
+    animationHub[keyName].play();
+  }
+}
+```

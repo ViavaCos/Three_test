@@ -115,6 +115,9 @@ const createHalfBallLight = () => {
   const halfBallLight = new THREE.HemisphereLight(0xffffff, 0x8d8d8d, 3)
   halfBallLight.position.set(0, 20, 0)
   scene.add(halfBallLight)
+
+  const halfBallLightHelper = new THREE.HemisphereLightHelper(halfBallLight)
+  scene.add(halfBallLightHelper)
 }
 
 // 创建平行光
@@ -132,6 +135,9 @@ const createDirectLight = () => {
   directLight.shadow.camera.far = 40
 
   scene.add(directLight)
+
+  const directLightHelper = new THREE.DirectionalLightHelper(directLight)
+  scene.add(directLightHelper)
 }
 
 // 创建地板
